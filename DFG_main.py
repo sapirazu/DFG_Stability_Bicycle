@@ -48,13 +48,16 @@ def camera_work():
 if __name__ == '__main__':
     # Create a Camera object
     zed = sl.Camera()
-
+    # Path of .svo2 file captured by ZED for testing
+    input_path = "C:/Users/owner/Documents/ZED/HD2K_SN37511070_14-32-49.svo2"
     # Create a InitParameters object and set configuration parameters
     init_params = sl.InitParameters()
-    init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
-    init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
-    init_params.depth_mode = sl.DEPTH_MODE.ULTRA
-    init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
+    init_params.set_from_svo_file(input_path)
+
+    # init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
+    # init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
+    # init_params.depth_mode = sl.DEPTH_MODE.ULTRA
+    # init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
 
     # Open the camera
     err = zed.open(init_params)
