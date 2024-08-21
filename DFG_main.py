@@ -17,6 +17,18 @@ def main():
     #fvbsfklvsl
     x=0
 
+def connect_myc():
+    db = mysql.connector.connect(
+     host="localhost",
+    user="root",
+    passwd="1995",
+    database="dfg"
+    )
+    refresh = RefreshOption.LOG | RefreshOption.THREADS
+    db.cmd_refresh(refresh)
+    myc = db.cursor()
+    return db, myc
+
 def camera_work():
     key_wait = 10
     while viewer.is_available():
@@ -48,6 +60,7 @@ def camera_work():
 if __name__ == '__main__':
     # Create a Camera object
     zed = sl.Camera()
+    (Db, MYC) = connect_myc()
 
     # Create a InitParameters object and set configuration parameters
     init_params = sl.InitParameters()
