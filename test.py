@@ -1,24 +1,63 @@
+import csv
 import cv2
 import sys
 import pyzed.sl as sl
-import ogl_viewer.viewer as gl
 import cv_viewer.tracking_viewer as cv_viewer
 import numpy as np
-import argparse
+import math as m
+import time
+import socket
+from ctypes import *
+import random
+import mysql.connector
+from mysql.connector import RefreshOption
+import ogl_viewer.viewer as gl
 
 def main():
-    print("Running Body Tracking sample ... Press 'q' to quit, or 'm' to pause or restart")
+    #fvbsfklvsl
+    x=0
 
+def camera_work():
+    key_wait = 10
+    while viewer.is_available():
+        # Grab an image
+        if zed.grab() == sl.ERROR_CODE.SUCCESS:
+            # Retrieve left image
+            zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
+            # Retrieve bodies
+            zed.retrieve_bodies(bodies, body_runtime_param)
+            # Update GL view
+            viewer.update_view(image, bodies)
+            # Update OCV view
+            image_left_ocv = image.get_data()
+            cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,
+                                body_param.body_format)
+            cv2.imshow("ZED | 2D View", image_left_ocv)
+            key = cv2.waitKey(key_wait)
+            if key == 113:  # for 'q' key
+                print("Exiting...")
+                break
+            if key == 109:  # for 'm' key
+                if (key_wait > 0):
+                    print("Pause")
+                    key_wait = 0
+                else:
+                    print("Restart")
+                    key_wait = 10
+
+if __name__ == '__main__':
     # Create a Camera object
     zed = sl.Camera()
-
+    # Path of .svo2 file captured by ZED for testing
+    input_path = "C:/Users/owner/Documents/ZED/HD2K_SN37511070_14-32-49.svo2"
     # Create a InitParameters object and set configuration parameters
     init_params = sl.InitParameters()
-    init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
-    init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
-    init_params.depth_mode = sl.DEPTH_MODE.ULTRA
-    init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
+    init_params.set_from_svo_file(input_path)
 
+    # init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
+    # init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
+    # init_params.depth_mode = sl.DEPTH_MODE.ULTRA
+    # init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
 
     # Open the camera
     err = zed.open(init_params)
@@ -59,39 +98,4 @@ def main():
     bodies = sl.Bodies()
     image = sl.Mat()
     key_wait = 10
-    while viewer.is_available():
-        # Grab an image
-        if zed.grab() == sl.ERROR_CODE.SUCCESS:
-            # Retrieve left image
-            zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
-            # Retrieve bodies
-            zed.retrieve_bodies(bodies, body_runtime_param)
-            # Update GL view
-            viewer.update_view(image, bodies)
-            # Update OCV view
-            image_left_ocv = image.get_data()
-            cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,
-                                body_param.body_format)
-            cv2.imshow("ZED | 2D View", image_left_ocv)
-            key = cv2.waitKey(key_wait)
-            if key == 113:  # for 'q' key
-                print("Exiting...")
-                break
-            if key == 109:  # for 'm' key
-                if (key_wait > 0):
-                    print("Pause")
-                    key_wait = 0
-                else:
-                    print("Restart")
-                    key_wait = 10
-    viewer.exit()
-    image.free(sl.MEM.CPU)
-    zed.disable_body_tracking()
-    zed.disable_positional_tracking()
-    zed.close()
-    cv2.destroyAllWindows()
-
-
-if __name__ == '__main__':
-
-    main()
+    camera_work()
