@@ -57,6 +57,11 @@ def camera_work():
                     print("Restart")
                     key_wait = 10
 
+def take_co():
+    x=0
+    
+
+
 if __name__ == '__main__':
     # Create a Camera object
     zed = sl.Camera()
