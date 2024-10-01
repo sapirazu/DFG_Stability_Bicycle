@@ -59,7 +59,21 @@ def angel_analsis(keypoint):
      torso_RL=0
      torso_BF=0
      keypoint
-
+     
+    #  x_0 = keypoint[0][0]
+    #  y_0 = keypoint[0][1]
+    #  z_0 = keypoint[0][2]
+    #  x_3 = keypoint[3][0]
+    #  y_3 = keypoint[3][1]
+    #  z_3 = keypoint[3][2]
+    #  x_12 = keypoint[12][0]
+    #  y_12 = keypoint[12][1]
+    #  z_12 = keypoint[12][2]
+    #  x_5 = keypoint[5][0]
+    #  y_5 = keypoint[5][1]
+    #  z_5 = keypoint[5][2]
+    #  pelvis = keypoint[3]
+    #  nake = keypoint[0]
 
 
 
@@ -120,5 +134,6 @@ if __name__ == '__main__':
     while viewer.is_available():
         camera_work()
         keypoint = take_co()
-        angel_analsis(keypoint)
+        if len(keypoint)!=0:
+         angel_analsis(keypoint)
 
