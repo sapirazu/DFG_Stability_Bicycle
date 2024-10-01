@@ -19,31 +19,49 @@ def main():
 
 def camera_work():
     key_wait = 10
-    while viewer.is_available():
-        # Grab an image
-        if zed.grab() == sl.ERROR_CODE.SUCCESS:
-            # Retrieve left image
-            zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
-            # Retrieve bodies
-            zed.retrieve_bodies(bodies, body_runtime_param)
+
+    if zed.grab() == sl.ERROR_CODE.SUCCESS:
+          # Retrieve left image
+        zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
+        # Retrieve bodies            
+        zed.retrieve_bodies(bodies, body_runtime_param)
             # Update GL view
-            viewer.update_view(image, bodies)
+        viewer.update_view(image, bodies)
             # Update OCV view
-            image_left_ocv = image.get_data()
-            cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,
-                                body_param.body_format)
-            cv2.imshow("ZED | 2D View", image_left_ocv)
-            key = cv2.waitKey(key_wait)
-            if key == 113:  # for 'q' key
+        image_left_ocv = image.get_data()
+        cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,body_param.body_format)
+                                
+        cv2.imshow("ZED | 2D View", image_left_ocv)
+        key = cv2.waitKey(key_wait)
+        if key == 113:  # for 'q' key
                 print("Exiting...")
-                break
-            if key == 109:  # for 'm' key
-                if (key_wait > 0):
+            
+        if key == 109:  # for 'm' key
+            if (key_wait > 0):
                     print("Pause")
                     key_wait = 0
-                else:
-                    print("Restart")
-                    key_wait = 10
+            else:
+                print("Restart")
+                key_wait = 10
+ 
+def take_co():
+    keypoint = []
+    obj_array=bodies.body_list
+    for i in range(len(obj_array)):
+        obj_data = obj_array[i]
+        position = obj_data.head_position
+        bounding_box = obj_data.bounding_box
+        keypoint = obj_data.keypoint
+    return keypoint
+
+def angel_analsis(keypoint):
+     shoulder=0
+     torso_RL=0
+     torso_BF=0
+     keypoint
+
+
+
 
 if __name__ == '__main__':
     # Create a Camera object
@@ -97,5 +115,10 @@ if __name__ == '__main__':
     # Create ZED objects filled in the main loop
     bodies = sl.Bodies()
     image = sl.Mat()
+    bodiedata = sl.BodyData
     key_wait = 10
-    camera_work()
+    while viewer.is_available():
+        camera_work()
+        keypoint = take_co()
+        angel_analsis(keypoint)
+
