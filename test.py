@@ -58,22 +58,12 @@ def angel_analsis(keypoint):
      shoulder=0
      torso_RL=0
      torso_BF=0
-     keypoint
-     
-    #  x_0 = keypoint[0][0]
-    #  y_0 = keypoint[0][1]
-    #  z_0 = keypoint[0][2]
-    #  x_3 = keypoint[3][0]
-    #  y_3 = keypoint[3][1]
-    #  z_3 = keypoint[3][2]
-    #  x_12 = keypoint[12][0]
-    #  y_12 = keypoint[12][1]
-    #  z_12 = keypoint[12][2]
-    #  x_5 = keypoint[5][0]
-    #  y_5 = keypoint[5][1]
-    #  z_5 = keypoint[5][2]
-    #  pelvis = keypoint[3]
-    #  nake = keypoint[0]
+     neck = keypoint[3]
+     pelvis = keypoint[0]
+     L_shoulder = keypoint[5]
+     R_shoulder = keypoint[12]
+
+
 
 
 
@@ -131,6 +121,9 @@ if __name__ == '__main__':
     image = sl.Mat()
     bodiedata = sl.BodyData
     key_wait = 10
+
+
+    ##################################### the mian loop  ###################################
     while viewer.is_available():
         camera_work()
         keypoint = take_co()
