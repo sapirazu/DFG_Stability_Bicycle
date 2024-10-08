@@ -31,48 +31,76 @@ def connect_myc():
 
 def camera_work():
     key_wait = 10
-    while viewer.is_available():
-        # Grab an image
-        if zed.grab() == sl.ERROR_CODE.SUCCESS:
-            # Retrieve left image
-            zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
-            # Retrieve bodies
-            zed.retrieve_bodies(bodies, body_runtime_param)
+
+    if zed.grab() == sl.ERROR_CODE.SUCCESS:
+          # Retrieve left image
+        zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
+        # Retrieve bodies            
+        zed.retrieve_bodies(bodies, body_runtime_param)
             # Update GL view
-            viewer.update_view(image, bodies)
+        viewer.update_view(image, bodies)
             # Update OCV view
-            image_left_ocv = image.get_data()
-            cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,
-                                body_param.body_format)
-            cv2.imshow("ZED | 2D View", image_left_ocv)
-            key = cv2.waitKey(key_wait)
-            if key == 113:  # for 'q' key
+        image_left_ocv = image.get_data()
+        cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,body_param.body_format)
+                                
+        cv2.imshow("ZED | 2D View", image_left_ocv)
+        key = cv2.waitKey(key_wait)
+        if key == 113:  # for 'q' key
                 print("Exiting...")
-                break
-            if key == 109:  # for 'm' key
-                if (key_wait > 0):
+            
+        if key == 109:  # for 'm' key
+            if (key_wait > 0):
                     print("Pause")
                     key_wait = 0
-                else:
-                    print("Restart")
-                    key_wait = 10
-
+            else:
+                print("Restart")
+                key_wait = 10
+ 
 def take_co():
-    x=0
-    
+    keypoint = []
+    obj_array=bodies.body_list
+    for i in range(len(obj_array)):
+        obj_data = obj_array[i]
+        position = obj_data.head_position
+        bounding_box = obj_data.bounding_box
+        keypoint = obj_data.keypoint
+    return keypoint
+
+def angel_analsis(keypoint):
+     shoulder=0
+     torso_RL=0
+     torso_BF=0
+     neck = keypoint[3]
+     pelvis = keypoint[0]
+     L_shoulder = keypoint[5]
+     R_shoulder = keypoint[12]
+     shoulder = np.around(m.degrees(m.atan2(L_shoulder[0] - R_shoulder[0], L_shoulder[1] -R_shoulder[1])), decimals=2)+90
+     torso_RL = np.around(m.degrees(m.atan2(pelvis[0] - neck[0], pelvis[1] -neck[1])), decimals=2)
+     torso_BF = np.around(m.degrees(m.atan2(pelvis[1] - neck[1], pelvis[2] -neck[2])), decimals=2)-90
+     all_angel=[shoulder,torso_RL,torso_BF]
+     return all_angel
+     
+
+
+     
+
+
+
 
 
 if __name__ == '__main__':
     # Create a Camera object
     zed = sl.Camera()
-    (Db, MYC) = connect_myc()
-
+    # Path of .svo2 file captured by ZED for testing
+    input_path = "C:/Users/owner/Documents/ZED/HD2K_SN37511070_14-32-49.svo2"
     # Create a InitParameters object and set configuration parameters
     init_params = sl.InitParameters()
-    init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
-    init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
-    init_params.depth_mode = sl.DEPTH_MODE.ULTRA
-    init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
+    init_params.set_from_svo_file(input_path)
+
+    # init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
+    # init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
+    # init_params.depth_mode = sl.DEPTH_MODE.ULTRA
+    # init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
 
     # Open the camera
     err = zed.open(init_params)
@@ -112,5 +140,14 @@ if __name__ == '__main__':
     # Create ZED objects filled in the main loop
     bodies = sl.Bodies()
     image = sl.Mat()
+    bodiedata = sl.BodyData
     key_wait = 10
-    camera_work()
+
+
+    ##################################### the mian loop  ###################################
+    while viewer.is_available():
+        camera_work()
+        keypoint = take_co()
+        if len(keypoint)!=0:
+         angel_analsis(keypoint)
+
