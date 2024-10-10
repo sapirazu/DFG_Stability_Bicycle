@@ -38,7 +38,7 @@ def camera_work():
         # Retrieve bodies            
         zed.retrieve_bodies(bodies, body_runtime_param)
             # Update GL view
-        viewer.update_view(image, bodies)
+        #viewer.update_view(image, bodies)
             # Update OCV view
         image_left_ocv = image.get_data()
         cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,body_param.body_format)
@@ -134,20 +134,27 @@ if __name__ == '__main__':
         , display_resolution.height / camera_info.camera_configuration.resolution.height]
 
     # Create OpenGL viewer
-    viewer = gl.GLViewer()
-    viewer.init(camera_info.camera_configuration.calibration_parameters.left_cam, body_param.enable_tracking,
-                body_param.body_format)
+    #viewer = gl.GLViewer()
+    #viewer.init(camera_info.camera_configuration.calibration_parameters.left_cam, body_param.enable_tracking,
+    #           body_param.body_format)
     # Create ZED objects filled in the main loop
     bodies = sl.Bodies()
     image = sl.Mat()
     bodiedata = sl.BodyData
     key_wait = 10
+    i=0
+    start_time = time.time()
+    timer = round((time.time() - start_time),6)
 
 
     ##################################### the mian loop  ###################################
-    while viewer.is_available():
+    while timer<30 :
+        timer = round((time.time() - start_time),6)
         camera_work()
         keypoint = take_co()
+        i += 1
         if len(keypoint)!=0:
-         angel_analsis(keypoint)
+         angel = angel_analsis(keypoint)
+        
+
 
