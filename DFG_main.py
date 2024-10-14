@@ -13,7 +13,7 @@ import mysql.connector
 from mysql.connector import RefreshOption
 import ogl_viewer.viewer as gl
 
-def main():
+def stert_camera():
     #fvbsfklvsl
     x=0
 
@@ -91,17 +91,13 @@ def angel_analsis(keypoint):
 if __name__ == '__main__':
     # Create a Camera object
     zed = sl.Camera()
+   
     # Path of .svo2 file captured by ZED for testing
     input_path = "C:/Users/owner/Documents/ZED/HD2K_SN37511070_14-32-49.svo2"
     # Create a InitParameters object and set configuration parameters
+    
     init_params = sl.InitParameters()
     init_params.set_from_svo_file(input_path)
-
-    # init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
-    # init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
-    # init_params.depth_mode = sl.DEPTH_MODE.ULTRA
-    # init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
-
     # Open the camera
     err = zed.open(init_params)
     if err != sl.ERROR_CODE.SUCCESS:
@@ -110,7 +106,7 @@ if __name__ == '__main__':
     # Enable Positional tracking (mandatory for object detection)
     positional_tracking_parameters = sl.PositionalTrackingParameters()
     # If the camera is static, uncomment the following line to have better performances
-    # positional_tracking_parameters.set_as_static = True
+    positional_tracking_parameters.set_as_static = True
     zed.enable_positional_tracking(positional_tracking_parameters)
 
     body_param = sl.BodyTrackingParameters()
@@ -133,16 +129,10 @@ if __name__ == '__main__':
     image_scale = [display_resolution.width / camera_info.camera_configuration.resolution.width
         , display_resolution.height / camera_info.camera_configuration.resolution.height]
 
-    # Create OpenGL viewer
-    #viewer = gl.GLViewer()
-    #viewer.init(camera_info.camera_configuration.calibration_parameters.left_cam, body_param.enable_tracking,
-    #           body_param.body_format)
     # Create ZED objects filled in the main loop
     bodies = sl.Bodies()
     image = sl.Mat()
-    bodiedata = sl.BodyData
     key_wait = 10
-    i=0
     start_time = time.time()
     timer = round((time.time() - start_time),6)
 
@@ -152,7 +142,6 @@ if __name__ == '__main__':
         timer = round((time.time() - start_time),6)
         camera_work()
         keypoint = take_co()
-        i += 1
         if len(keypoint)!=0:
          angel = angel_analsis(keypoint)
         
