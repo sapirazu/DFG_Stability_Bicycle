@@ -41,12 +41,15 @@ def camera_work():
         #viewer.update_view(image, bodies)
             # Update OCV view
         image_left_ocv = image.get_data()
+        
         cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,body_param.body_format)
-                                
+        image_left_ocv = cv2.resize(image_left_ocv, (0,0),fx=0.5,fy=0.5 )                        
         cv2.imshow("ZED | 2D View", image_left_ocv)
+         
         key = cv2.waitKey(key_wait)
         if key == 113:  # for 'q' key
                 print("Exiting...")
+                key_wait=0
             
         if key == 109:  # for 'm' key
             if (key_wait > 0):
@@ -55,6 +58,7 @@ def camera_work():
             else:
                 print("Restart")
                 key_wait = 10
+    return key_wait            
  
 def take_co():
     keypoint = []
@@ -74,10 +78,11 @@ def angel_analsis(keypoint):
      pelvis = keypoint[0]
      L_shoulder = keypoint[5]
      R_shoulder = keypoint[12]
-     shoulder = np.around(m.degrees(m.atan2(L_shoulder[0] - R_shoulder[0], L_shoulder[1] -R_shoulder[1])), decimals=2)+90
+     shoulder = np.around(m.degrees(m.atan2(L_shoulder[0] - R_shoulder[0], L_shoulder[1] -R_shoulder[1]))+90, decimals=2)
      torso_RL = np.around(m.degrees(m.atan2(pelvis[0] - neck[0], pelvis[1] -neck[1])), decimals=2)
-     torso_BF = np.around(m.degrees(m.atan2(pelvis[1] - neck[1], pelvis[2] -neck[2])), decimals=2)-90
+     torso_BF = np.around(m.degrees(m.atan2(pelvis[1] - neck[1], pelvis[2] -neck[2]))-90, decimals=2)
      all_angel=[shoulder,torso_RL,torso_BF]
+     print("torso_R-L=", torso_RL,"/// torso_B-F=" , torso_BF,  "/// shoulder=", shoulder)
      return all_angel
      
 
@@ -138,9 +143,9 @@ if __name__ == '__main__':
 
 
     ##################################### the mian loop  ###################################
-    while timer<30 :
+    while timer<30 and key_wait==10 :
         timer = round((time.time() - start_time),6)
-        camera_work()
+        key_wait = camera_work()
         keypoint = take_co()
         if len(keypoint)!=0:
          angel = angel_analsis(keypoint)
