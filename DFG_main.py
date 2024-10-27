@@ -10,7 +10,7 @@ import socket
 from ctypes import *
 import random
 import mysql.connector
-from mysql.connector import RefreshOption
+from mysql.connector.constants import RefreshOption
 import ogl_viewer.viewer as gl
 
 def stert_camera():
@@ -24,7 +24,7 @@ def connect_myc():
     passwd="1995",
     database="dfg"
     )
-    refresh = RefreshOption.LOG | RefreshOption.THREADS
+    refresh = RefreshOption.LOG
     db.cmd_refresh(refresh)
     myc = db.cursor()
     return db, myc
@@ -82,7 +82,7 @@ def angel_analsis(keypoint):
      torso_RL = np.around(m.degrees(m.atan2(pelvis[0] - neck[0], pelvis[1] -neck[1])), decimals=2)
      torso_BF = np.around(m.degrees(m.atan2(pelvis[1] - neck[1], pelvis[2] -neck[2]))-90, decimals=2)
      all_angel=[shoulder,torso_RL,torso_BF]
-     print("torso_R-L=", torso_RL,"/// torso_B-F=" , torso_BF,  "/// shoulder=", shoulder)
+     print("torso_R-L=", torso_RL,"/// torso_B-F=" , torso_BF,  "/// shoulder=", shoulder," /// time: ", timer )
      return all_angel
      
 
@@ -140,6 +140,9 @@ if __name__ == '__main__':
     key_wait = 10
     start_time = time.time()
     timer = round((time.time() - start_time),6)
+
+
+    db=connect_myc()
 
 
     ##################################### the mian loop  ###################################
