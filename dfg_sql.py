@@ -49,14 +49,15 @@ exercise_data = (1, 'gating started', 'first exercise', 10)
 # יצירת טבלת היסטורית אימונים
 create_exercise_history_table_query = """
 CREATE TABLE exercise_history (
-    e
+    exercise_Number INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     exercise_ID INT,
+    score INT,
     date DATE,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (exercise_ID) REFERENCES exercise_progrems(exercise_ID)
 )
 """
 #             בחירת ביצוע פעולה- לבחור פעולה ואת להוריד את הערה בשורה למטה
-mycursor.execute(insert_exercise_query,exercise_data)
+mycursor.execute(create_exercise_history_table_query)
 db.commit()
