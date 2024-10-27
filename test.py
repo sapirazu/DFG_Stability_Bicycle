@@ -3,7 +3,7 @@
 # import sys
 # import pyzed.sl as sl
 # import cv_viewer.tracking_viewer as cv_viewer
-# import numpy as np
+import numpy as np
 # import math as m
 import time
 # import socket
@@ -17,29 +17,65 @@ from edcon.edrive.com_modbus import ComModbus
 from edcon.edrive.motion_handler import MotionHandler
 from edcon.utils.logging import Logging
 
-# Enable loglevel info
-Logging()
-# Create a list of all Modbus targets
-coms = [ComModbus(ip_address='192.168.0.11'),
-        ComModbus(ip_address='192.168.0.3')]
-mots = [MotionHandler(com) for com in coms]
+def move_platform(mots, dirction, angel,speed):
+    step=angel*14000
+    match dirction:
+        case 'f':
+            # move forward
+            position_0=150000+step
+            position_1=150000+step
+            pass
+        case 'b':
+            # move backward
+            position_0=150000-step
+            position_1=150000-step
+            pass
+        case 'l':
+            # move left
+            position_0=150000-step
+            position_1=150000+step
+            pass
+        case 'r':
+            # move right
+            position_0=150000+step
+            position_1=150000-step
+            pass
+        case 'h':
+            # move home
+            position_0=150000
+            position_1=150000
+            pass
 
-for mot in mots:
-    mot.acknowledge_faults()
-    mot.enable_powerstage()
-    if not mot.referenced():
-        mot.referencing_task()
+    mots[0].position_task(position_0, speed, absolute=True, nonblocking=True)
+    mots[1].position_task(position_1, speed, absolute=True, nonblocking=True)
+    while True:
+        target_positions_reached = [mot.target_position_reached() for mot in mots]
+        Logging.logger.info(f"Target positions reached: {target_positions_reached}")
+        if all(target_positions_reached):
+            break
 
-for mot in mots:
-    mot.position_task(150000, 30,absolute=True, nonblocking=True) # 1cm=1000
-time.sleep(0.1)
 
-while True:
-    target_positions_reached = [mot.target_position_reached() for mot in mots]
-    Logging.logger.info(f"Target positions reached: {target_positions_reached}")
-    if all(target_positions_reached):
-        break
-    time.sleep(0.1)
+if __name__ == "__main__":
 
-for mot in mots:
-    mot.shutdown()        
+    # Enable loglevel info
+    Logging()
+    # Create a list of all Modbus targets
+    coms = [ComModbus(ip_address='192.168.0.11'),
+            ComModbus(ip_address='192.168.0.3')]
+    mots = [MotionHandler(com) for com in coms]
+
+    for mot in mots:
+        mot.acknowledge_faults()
+        mot.enable_powerstage()
+        if not mot.referenced():
+            mot.referencing_task()
+
+    move_platform(mots, 'h', 0, 60)
+    move_platform(mots, 'f', 3, 60)
+    move_platform(mots, 'b', 5, 60)
+    move_platform(mots, 'l', 3, 60)
+    move_platform(mots, 'r', 5, 60)
+    move_platform(mots, 'h', 0, 60)
+
+    for mot in mots:
+        mot.shutdown()
