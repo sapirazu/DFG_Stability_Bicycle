@@ -98,7 +98,7 @@ if __name__ == '__main__':
     zed = sl.Camera()
    
     # Path of .svo2 file captured by ZED for testing
-    input_path = "C:/Users/owner/Documents/ZED/HD2K_SN37511070_14-32-49.svo2"
+    input_path = "C:/Users/owner/Documents/ZED/HD2K_SN28318474_10-30-32.svo2"
     # Create a InitParameters object and set configuration parameters
     
     init_params = sl.InitParameters()
@@ -146,7 +146,7 @@ if __name__ == '__main__':
 
 
     ##################################### the mian loop  ###################################
-    while timer<30 and key_wait==10 :
+    while timer<120 and key_wait==10 :
         timer = round((time.time() - start_time),6)
         key_wait = camera_work()
         keypoint = take_co()
