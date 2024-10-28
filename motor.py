@@ -3,6 +3,7 @@ from edcon.edrive.motion_handler import MotionHandler
 from edcon.utils.logging import Logging
 
 def move_platform(mots, dirction, angel,speed):
+    # mots=connect()
     step=angel*14000
     match dirction:
         case 'f':
@@ -33,11 +34,11 @@ def move_platform(mots, dirction, angel,speed):
 
     mots[0].position_task(position_0, speed, absolute=True, nonblocking=True)
     mots[1].position_task(position_1, speed, absolute=True, nonblocking=True)
-    while True:
-        target_positions_reached = [mot.target_position_reached() for mot in mots]
-        Logging.logger.info(f"Target positions reached: {target_positions_reached}")
-        if all(target_positions_reached):
-            break
+    target_positions_reached = [mot.target_position_reached() for mot in mots]
+    # while True:
+    #     target_positions_reached = [mot.target_position_reached() for mot in mots]
+    #     if all(target_positions_reached):
+    #         break
 
 def connect():
     coms = [ComModbus(ip_address='192.168.0.11'),   # Right motor

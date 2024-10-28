@@ -156,7 +156,7 @@ def angel_analsis(keypoint):
      torso_RL = np.around(m.degrees(m.atan2(pelvis[0] - neck[0], pelvis[1] -neck[1])), decimals=2)
      torso_BF = np.around(m.degrees(m.atan2(pelvis[1] - neck[1], pelvis[2] -neck[2]))-90, decimals=2)
      all_angel=[shoulder,torso_RL,torso_BF]
-     print("torso_R-L=", torso_RL,"/// torso_B-F=" , torso_BF,  "/// shoulder=", shoulder)
+     #print("torso_R-L=", torso_RL,"/// torso_B-F=" , torso_BF,  "/// shoulder=", shoulder)
      return all_angel
      
 

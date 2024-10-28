@@ -32,7 +32,7 @@ CREATE TABLE exercise_progrems (
     exercise_ID INT PRIMARY KEY,
     exercise_name VARCHAR(50),
     description VARCHAR(50),
-    time TINYINT
+    time INT
 )
 """
 
@@ -41,9 +41,9 @@ insert_exercise_query = """
 INSERT INTO exercise_progrems (exercise_ID, exercise_name, description, time)
 VALUES (%s, %s, %s, %s)
 """
-exercise_data = (1, 'gating started', 'first exercise', 10)
+exercise_data = (2, 'sec', 'sec exercise', 4*60)
 
-
+# mycursor.execute(insert_exercise_query, exercise_data)
 
 
 # יצירת טבלת היסטורית אימונים
@@ -58,6 +58,70 @@ CREATE TABLE exercise_history (
     FOREIGN KEY (exercise_ID) REFERENCES exercise_progrems(exercise_ID)
 )
 """
+
+
+# יצירת טבלת סגמנטים
+create_exercise_sement_table_query = """
+CREATE TABLE exercise_sement (
+    segment_ID INT AUTO_INCREMENT PRIMARY KEY,
+    segment_time INT,
+    speed INT,
+    angle INT,
+    exercise_ID INT,
+    Direction ENUM('f', 'b', 'l', 'r', 'h'),
+    FOREIGN KEY (exercise_ID) REFERENCES exercise_progrems(exercise_ID)
+)
+"""
+
+# הכנסת נתונים לטבלת סגמנטים
+
+insert_exercise_sement_query = """
+INSERT INTO exercise_sement (segment_time, speed, angle, exercise_ID, Direction)
+VALUES (%s, %s, %s, %s, %s)
+"""
+exercise_ID= 2
+sement_data = [(10, 50, 5, exercise_ID, 'h'),(20, 50, 5, exercise_ID, 'f'),(30, 50, 5, exercise_ID, 'b'),(40, 50, 5, exercise_ID, 'l'),(50, 50, 5, exercise_ID, 'r')]
+# for i in sement_data:
+#     mycursor.execute(insert_exercise_sement_query, i)
+
+
+# פעולות על טבלאות
+# שינוי סוג משתנה בעמודה בטבלה
+alter_table_query1 = f"ALTER TABLE {'exercise_progrems'} MODIFY COLUMN {'time'} {'INT'}"         
+
+# הוספת עמודה לטבלה
+alter_table_query2 = f"ALTER TABLE {'exercise_progrems'} ADD COLUMN {'time'} {'INT'}"
+
+# מחיקת עמודה מטבלה
+alter_table_query3 = f"ALTER TABLE {'exercise_progrems'} DROP COLUMN {'time'}"
+
+# מחיקת טבלה
+alter_table_query4 = f"DROP TABLE {'exercise_progrems'}"
+
+# עדכון ערך בטבלה
+alter_table_query5 = f"UPDATE {'exercise_progrems'} SET {'time'} = 300 WHERE {'exercise_ID'} = 1"
+
+# מחיקת רשומה מטבלה
+alter_table_query6 = f"DELETE FROM {'exercise_progrems'} WHERE {'exercise_ID'} = 1"
+
+# שליפת כל הסגמנטים של אימון מסוים
+# alter_table_query7 = f"SELECT * FROM {'exercise_sement'} WHERE {'exercise_ID'} = 1"
+# mycursor.execute(alter_table_query7)
+# myresult = mycursor.fetchall()
+# for x in myresult:
+#     print(x)
+
+# מיין סגמנטים לפי זמן
+alter_table_query8 = f"SELECT * FROM {'exercise_sement'} WHERE {'exercise_ID'} = 1 ORDER BY {'segment_time'}"
+mycursor.execute(alter_table_query8)
+myresult = mycursor.fetchall()
+for x in myresult:
+    print(x)
+
+
 #             בחירת ביצוע פעולה- לבחור פעולה ואת להוריד את הערה בשורה למטה
-mycursor.execute(create_exercise_history_table_query)
+
+
+# mycursor.execute(alter_table_query5)
+# mycursor.execute(insert_exercise_sement_query, sement_data)
 db.commit()
