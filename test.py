@@ -58,10 +58,15 @@ def move_platform(mots, dirction, angel,speed):
 if __name__ == "__main__":
 
     # Enable loglevel info
-    Logging()
+    #Logging()
     # Create a list of all Modbus targets
-    coms = [ComModbus(ip_address='192.168.0.11'),
-            ComModbus(ip_address='192.168.0.3')]
+    coms = [ComModbus(ip_address='192.168.0.1'),   # Right motor
+            ComModbus(ip_address='192.168.0.3')]    # Left motor
+    
+    for com in coms:
+       if not com.connected():
+        exit()
+
     mots = [MotionHandler(com) for com in coms]
 
     for mot in mots:
