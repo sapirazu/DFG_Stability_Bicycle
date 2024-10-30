@@ -27,12 +27,13 @@ if __name__ == '__main__':
     # connect to data base
     db, myc=data_function.connect_myc()
     Segment_list, exercise_progrem = data_function.get_exercise_progrems(myc, 1)
+    user1 = data_function.get_user(myc, 209146216)
     x=0
 
     # create excel file for the data 
     wb = openpyxl.Workbook()
     sheet = wb.active
-    sheet.append(['time', 'shoulder', 'torso_RL', 'torso_BF', 'platform_angle_bf', 'platform_angle_rl'])
+    sheet.append(['time', 'shoulder', 'torso_RL', 'torso_BF', 'platform_angle_bf', 'platform_angle_rl', 'angle_avg_shoulder', 'angle_avg_torso_RL', 'angle_avg_torso_BF'])
 
     # connect to motors
     motors = motor.connect()
@@ -54,13 +55,12 @@ if __name__ == '__main__':
 
         if len(keypoint)!=0:
          angel = z_camera.angel_analsis(keypoint)                                                               # [0]=shoulder, [1] = torso_RL, [2] torso_BF
-         sheet.append([timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1]])              
+         sheet.append([timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2]])              
            
            
            
             # calibrate the bady angel for 60 sec
         if timer>15 and angel_avg[0]==0:
-          # take all the angel of the body from the exel file and calculate the average
             angel_avg = data_function.calibrate_body_angle(sheet)                                               
             
 
@@ -86,10 +86,11 @@ if __name__ == '__main__':
 
 
 
-
+    date = time.strftime("%Y-%m-%d")
     # shutdown all
     data_function.create_chart(sheet)
-    wb.save('exercise.xlsx')    
+    exel_file_name = user1.name + "_exercise_" + str(exercise_progrem.exercise_ID) + "_" + date +  ".xlsx"     
+    wb.save(exel_file_name)    
     for mot in motors:
         mot.shutdown()
     db.close()

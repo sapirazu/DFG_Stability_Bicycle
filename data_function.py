@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import RefreshOption
 import openpyxl
-
+import os
 
 
 class Segment:
@@ -20,7 +20,13 @@ class exercise:
         self.description = description
         self.time = time
 
-
+class user:
+    def __init__(self, user_id, gender, age, name,):
+        self.user_id = user_id
+        self.gender = gender
+        self.age = age
+        self.name = name
+         
 
 
 
@@ -54,6 +60,15 @@ def get_exercise_progrems(myc, exercise_ID): # get the exercise progrems from th
 
     return Segment_list, exercise_progrem
 
+def get_user(myc, user_id): # get the user from the database
+    myc.execute( f"SELECT * FROM users WHERE user_id = {user_id}")
+    myresult = myc.fetchall()
+    user1 = user(myresult[0][0], myresult[0][1], myresult[0][2], myresult[0][3])
+    print("ID", user1.user_id,"name", user1.name)
+    return user1
+    
+
+
 
 
 def calibrate_body_angle(sheet):
@@ -79,6 +94,16 @@ def create_chart(sheet):
     chart.y_axis.title = "Angel"
     chart.x_axis.title = "Time"
     chart.title = "Angel over time"
-    data = openpyxl.chart.Reference(sheet, min_col=2, min_row=1, max_row=sheet.max_row, max_col=6)
+    data = openpyxl.chart.Reference(sheet, min_col=2, min_row=1, max_row=sheet.max_row, max_col=sheet.max_column)
     chart.add_data(data, titles_from_data=True)
     sheet.add_chart(chart, "F1")
+
+
+def create_user_directory(user_name):
+    directory_path = os.path.join(os.getcwd(), user_name)
+    try:
+        os.makedirs(directory_path, exist_ok=True)
+        print(f"Directory '{directory_path}' created successfully.")
+    except Exception as e:
+        print(f"Failed to create directory '{directory_path}'. Error: {e}")
+    return directory_path
