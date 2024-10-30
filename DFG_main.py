@@ -1,98 +1,101 @@
-import csv
 import cv2
-import sys
 import pyzed.sl as sl
 import cv_viewer.tracking_viewer as cv_viewer
 import numpy as np
 import math as m
 import time
-import socket
 from ctypes import *
-import random
 import mysql.connector
-from mysql.connector import RefreshOption
+from mysql.connector.constants import RefreshOption
 import ogl_viewer.viewer as gl
+from edcon.edrive.com_modbus import ComModbus
+from edcon.edrive.motion_handler import MotionHandler
+from edcon.utils.logging import Logging
+import motor
+import z_camera
+import openpyxl
+import data_function
 
-def main():
-    #fvbsfklvsl
-    x=0
 
-def camera_work():
-    key_wait = 10
-    while viewer.is_available():
-        # Grab an image
-        if zed.grab() == sl.ERROR_CODE.SUCCESS:
-            # Retrieve left image
-            zed.retrieve_image(image, sl.VIEW.LEFT, sl.MEM.CPU, display_resolution)
-            # Retrieve bodies
-            zed.retrieve_bodies(bodies, body_runtime_param)
-            # Update GL view
-            viewer.update_view(image, bodies)
-            # Update OCV view
-            image_left_ocv = image.get_data()
-            cv_viewer.render_2D(image_left_ocv, image_scale, bodies.body_list, body_param.enable_tracking,
-                                body_param.body_format)
-            cv2.imshow("ZED | 2D View", image_left_ocv)
-            key = cv2.waitKey(key_wait)
-            if key == 113:  # for 'q' key
-                print("Exiting...")
-                break
-            if key == 109:  # for 'm' key
-                if (key_wait > 0):
-                    print("Pause")
-                    key_wait = 0
-                else:
-                    print("Restart")
-                    key_wait = 10
 
 if __name__ == '__main__':
-    # Create a Camera object
-    zed = sl.Camera()
+    
+    # connect to camera
+    zed, camera_data=z_camera.stert_camera_recorded()
+    # zed, camera_data=z_camera.stert_camera_live()
+   
+    # connect to data base
+    db, myc=data_function.connect_myc()
+    Segment_list, exercise_progrem = data_function.get_exercise_progrems(myc, 1)
+    user1 = data_function.get_user(myc, 209146216)
+    x=0
 
-    # Create a InitParameters object and set configuration parameters
-    init_params = sl.InitParameters()
-    init_params.camera_resolution = sl.RESOLUTION.HD1080  # Use HD1080 video mode
-    init_params.coordinate_units = sl.UNIT.METER  # Set coordinate units
-    init_params.depth_mode = sl.DEPTH_MODE.ULTRA
-    init_params.coordinate_system = sl.COORDINATE_SYSTEM.RIGHT_HANDED_Y_UP
+    # create excel file for the data 
+    wb = openpyxl.Workbook()
+    sheet = wb.active
+    sheet.append(['time', 'shoulder', 'torso_RL', 'torso_BF', 'platform_angle_bf', 'platform_angle_rl', 'angle_avg_shoulder', 'angle_avg_torso_RL', 'angle_avg_torso_BF'])
 
-    # Open the camera
-    err = zed.open(init_params)
-    if err != sl.ERROR_CODE.SUCCESS:
-        exit(1)
+    # connect to motors
+    motors = motor.connect()
+    motor.move_platform(motors, 'h', 0, 200)
 
-    # Enable Positional tracking (mandatory for object detection)
-    positional_tracking_parameters = sl.PositionalTrackingParameters()
-    # If the camera is static, uncomment the following line to have better performances
-    # positional_tracking_parameters.set_as_static = True
-    zed.enable_positional_tracking(positional_tracking_parameters)
 
-    body_param = sl.BodyTrackingParameters()
-    body_param.enable_tracking = True  # Track people across images flow
-    body_param.enable_body_fitting = False  # Smooth skeleton move
-    body_param.detection_model = sl.BODY_TRACKING_MODEL.HUMAN_BODY_FAST
-    body_param.body_format = sl.BODY_FORMAT.BODY_34  # Choose the BODY_FORMAT you wish to use
-
-    # Enable Object Detection module
-    zed.enable_body_tracking(body_param)
-
-    body_runtime_param = sl.BodyTrackingRuntimeParameters()
-    body_runtime_param.detection_confidence_threshold = 40
-
-    # Get ZED camera information
-    camera_info = zed.get_camera_information()
-    # 2D viewer utilities
-    display_resolution = sl.Resolution(min(camera_info.camera_configuration.resolution.width, 1280),
-                                       min(camera_info.camera_configuration.resolution.height, 720))
-    image_scale = [display_resolution.width / camera_info.camera_configuration.resolution.width
-        , display_resolution.height / camera_info.camera_configuration.resolution.height]
-
-    # Create OpenGL viewer
-    viewer = gl.GLViewer()
-    viewer.init(camera_info.camera_configuration.calibration_parameters.left_cam, body_param.enable_tracking,
-                body_param.body_format)
-    # Create ZED objects filled in the main loop
-    bodies = sl.Bodies()
-    image = sl.Mat()
     key_wait = 10
-    camera_work()
+    start_time = time.time()
+    timer = round((time.time() - start_time),6)
+    segment_time = 0
+    platform_angle = [0,0] # [0] = BF, [1] = RL
+    angel_avg = [0,0,0] # [0]=shoulder, [1] = torso_RL, [2] torso_BF
+    ##################################### the mian loop  ###################################
+    while timer<exercise_progrem.time and key_wait==10 :
+        timer = round((time.time() - start_time),6)
+        print (timer)
+        key_wait = z_camera.camera_work(zed, camera_data)
+        keypoint = z_camera.take_co(camera_data.bodies)                                                         # 0= pelvis, 3= neck, 5= L_shoulder, 12= R_shoulder
+
+        
+        if len(keypoint)!=0:
+         angel = z_camera.angel_analsis(keypoint)                                                               # [0]=shoulder, [1] = torso_RL, [2] torso_BF
+         sheet.append([timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2]])              
+           
+           
+           
+            # calibrate the bady angel for 60 sec
+        if timer>15 and angel_avg[0]==0:
+            angel_avg = data_function.calibrate_body_angle(sheet)                                               
+            
+
+        
+        if x<len(Segment_list) and timer>Segment_list[x].time:
+            motor.move_platform(motors, Segment_list[x].direction, Segment_list[x].angle, Segment_list[x].speed)
+            
+            if Segment_list[x].direction == 'f' or Segment_list[x].direction == 'b':
+                platform_angle[0] =Segment_list[x].angle
+            if Segment_list[x].direction == 'r' or Segment_list[x].direction == 'l':
+                platform_angle[1] =Segment_list[x].angle
+            segment_time = timer
+            x=x+1
+
+   
+        if segment_time!=0 and segment_time + 5 < timer: 
+            motor.move_platform(motors, 'h', 0, 200)
+            segment_time = 0
+            platform_angle = [0,0]
+            
+
+
+
+
+
+    date = time.strftime("%Y-%m-%d")
+    # shutdown all
+    data_function.create_chart(sheet)
+    exel_file_name = user1.name + "_exercise_" + str(exercise_progrem.exercise_ID) + "_" + date +  ".xlsx"     
+    wb.save(exel_file_name)    
+    for mot in motors:
+        mot.shutdown()
+    db.close()
+    zed.close()
+    cv2.destroyAllWindows()
+    print("finish")
+
