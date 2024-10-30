@@ -21,8 +21,8 @@ import data_function
 if __name__ == '__main__':
     
     # connect to camera
-    # zed, camera_data=z_camera.stert_camera_recorded()
-    zed, camera_data=z_camera.stert_camera_live()
+    zed, camera_data=z_camera.stert_camera_recorded()
+    # zed, camera_data=z_camera.stert_camera_live()
    
     # connect to data base
     db, myc=data_function.connect_myc()
@@ -53,6 +53,7 @@ if __name__ == '__main__':
         key_wait = z_camera.camera_work(zed, camera_data)
         keypoint = z_camera.take_co(camera_data.bodies)                                                         # 0= pelvis, 3= neck, 5= L_shoulder, 12= R_shoulder
 
+        
         if len(keypoint)!=0:
          angel = z_camera.angel_analsis(keypoint)                                                               # [0]=shoulder, [1] = torso_RL, [2] torso_BF
          sheet.append([timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2]])              
