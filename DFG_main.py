@@ -16,7 +16,33 @@ import z_camera
 import openpyxl
 import data_function
 
-
+# function to check if the angel is a good response to the platform angel
+def angel_analsis(angel, angel_avg ,platform_angel,direction):
+    # angel = [0]=shoulder, [1] = torso_RL, [2] torso_BF
+    # angel_avg = [0]=shoulder, [1] = torso_RL, [2] torso_BF
+    # platform_angel = [0] = BF, [1] = RL
+    # direction = 'f' or 'b' or 'l' or 'r'
+    match direction:
+        case 'f':
+            if angel[2] > angel_avg[2] + platform_angel[0]:
+                return True
+            else:
+                return False    
+        case 'b':
+            if angel[2] < angel_avg[2] - platform_angel[0]:
+                return True
+            else:
+                return False
+        case 'l':
+            if angel[1] > angel_avg[1] + platform_angel[1] or angel[0] > angel_avg[0] + platform_angel[1]:
+                return True
+            else:
+                return False
+        case 'r':
+            if angel[1] < angel_avg[1] - platform_angel[1] or angel[0] < angel_avg[0] - platform_angel[1]:
+                return True
+            else:
+                return False
 
 if __name__ == '__main__':
     
@@ -76,9 +102,14 @@ if __name__ == '__main__':
             segment_time = timer
             x=x+1
 
-   
+        if segment_time!=0 and angel_analsis(angel, angel_avg, platform_angle, Segment_list[x-1].direction):
+            motor.move_platform(motors, 'h', 0, 100)
+            segment_time = 0
+            platform_angle = [0,0]
+
+
         if segment_time!=0 and segment_time + 5 < timer: 
-            motor.move_platform(motors, 'h', 0, 200)
+            motor.move_platform(motors, 'h', 0, 100)
             segment_time = 0
             platform_angle = [0,0]
             
