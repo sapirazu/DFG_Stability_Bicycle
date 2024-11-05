@@ -15,6 +15,7 @@ import motor
 import z_camera
 import openpyxl
 import data_function
+import matplotlib.pyplot as plt
 
 # function to check if the angel is a good response to the platform angel
 def angel_analsis(angel, angel_avg ,platform_angel,direction):
@@ -60,7 +61,8 @@ if __name__ == '__main__':
     wb = openpyxl.Workbook()
     sheet = wb.active
     sheet.append(['time', 'shoulder', 'torso_RL', 'torso_BF', 'platform_angle_bf', 'platform_angle_rl', 'angle_avg_shoulder', 'angle_avg_torso_RL', 'angle_avg_torso_BF'])
-
+    # יצירת גרף בעזרת math plot lib
+    # plot = data_function.create_plot()
     # connect to motors
     motors = motor.connect()
     motor.move_platform(motors, 'h', 0, 200)
@@ -83,7 +85,8 @@ if __name__ == '__main__':
         if len(keypoint)!=0:
          angel = z_camera.angel_analsis(keypoint)                                                               # [0]=shoulder, [1] = torso_RL, [2] torso_BF
          sheet.append([timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2]])              
-           
+         # update the plot
+        #  data_function.update_plot(plot, timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2])  
            
            
             # calibrate the bady angel for 60 sec
