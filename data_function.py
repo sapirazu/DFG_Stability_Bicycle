@@ -120,6 +120,7 @@ def create_plot():
     plt.plot([], [], 'ro', label='shoulder')
     plt.plot([], [], 'bo', label='torso_RL')
     plt.plot([], [], 'go', label='torso_BF')
+
     plt.ylim(-20, 20)
 
     plt.legend()
@@ -157,4 +158,36 @@ def update_plot(plt, timer, shoulder, torso_RL, torso_BF, platform_angle_BF, pla
     else:
         plt.xlim(0, 3)
 
+def print_plot(plt, sheet):
+    # take all the angel of the body from the exel file of the last 60 sec and print the plot
+    plt.clf()
+
+    shoulder = []
+    torso_RL = []
+    torso_BF = []
+    platform_angle_BF = []
+    platform_angle_RL = []
+    shoulder_avg = []
+    torso_RL_avg = []
+    torso_BF_avg = []
+
+    for row in sheet.iter_rows(min_row=sheet.max_row-120, max_row=sheet.max_row, min_col=2, max_col=10, values_only=True):
+        shoulder.append(row[0])
+        torso_RL.append(row[1])
+        torso_BF.append(row[2])
+        platform_angle_BF.append(row[4])
+        platform_angle_RL.append(row[5])
+        shoulder_avg.append(row[6])
+        torso_RL_avg.append(row[7])
+        torso_BF_avg.append(row[8])
+    
+    plt.plot(shoulder, label='shoulder')
+    plt.plot(torso_RL, label='torso_RL')
+    plt.plot(torso_BF, label='torso_BF')
+    plt.plot(platform_angle_BF, label='platform_angle_BF')
+    plt.plot(platform_angle_RL, label='platform_angle_RL')
+    plt.plot(shoulder_avg, label='shoulder_avg')
+    plt.plot(torso_RL_avg, label='torso_RL_avg')
+    plt.plot(torso_BF_avg, label='torso_BF_avg')
+    plt.legend()
     
