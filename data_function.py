@@ -90,7 +90,7 @@ def calibrate_body_angle(sheet):
 def create_chart(sheet):
         #create the chart in the excel file time will be the x axis and the angel will be the y axis
     chart = openpyxl.chart.LineChart()
-    chart.style = 13
+    chart.style = 10
     chart.y_axis.title = "Angel"
     chart.x_axis.title = "Time"
     chart.title = "Angel over time"
