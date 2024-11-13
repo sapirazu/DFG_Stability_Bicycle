@@ -15,8 +15,36 @@ import motor
 import z_camera
 import openpyxl
 import data_function
+import matplotlib.pyplot as plt
+import Gui
 
-
+# function to check if the angel is a good response to the platform angel
+def angel_analsis(angel, angel_avg ,platform_angel,direction):
+    # angel = [0]=shoulder, [1] = torso_RL, [2] torso_BF
+    # angel_avg = [0]=shoulder, [1] = torso_RL, [2] torso_BF
+    # platform_angel = [0] = BF, [1] = RL
+    # direction = 'f' or 'b' or 'l' or 'r'
+    match direction:
+        case 'f':
+            if angel[2] > angel_avg[2] + platform_angel[0]:
+                return True
+            else:
+                return False    
+        case 'b':
+            if angel[2] < angel_avg[2] - platform_angel[0]:
+                return True
+            else:
+                return False
+        case 'l':
+            if angel[1] > angel_avg[1] + platform_angel[1] or angel[0] > angel_avg[0] + platform_angel[1]:
+                return True
+            else:
+                return False
+        case 'r':
+            if angel[1] < angel_avg[1] - platform_angel[1] or angel[0] < angel_avg[0] - platform_angel[1]:
+                return True
+            else:
+                return False
 
 if __name__ == '__main__':
     
@@ -34,7 +62,8 @@ if __name__ == '__main__':
     wb = openpyxl.Workbook()
     sheet = wb.active
     sheet.append(['time', 'shoulder', 'torso_RL', 'torso_BF', 'platform_angle_bf', 'platform_angle_rl', 'angle_avg_shoulder', 'angle_avg_torso_RL', 'angle_avg_torso_BF'])
-
+    # יצירת גרף בעזרת math plot lib
+    # plot = data_function.create_plot()
     # connect to motors
     motors = motor.connect()
     motor.move_platform(motors, 'h', 0, 200)
@@ -57,7 +86,8 @@ if __name__ == '__main__':
         if len(keypoint)!=0:
          angel = z_camera.angel_analsis(keypoint)                                                               # [0]=shoulder, [1] = torso_RL, [2] torso_BF
          sheet.append([timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2]])              
-           
+         # update the plot
+        #  data_function.update_plot(plot, timer, angel[0], angel[1], angel[2], platform_angle[0], platform_angle[1], angel_avg[0], angel_avg[1], angel_avg[2])  
            
            
             # calibrate the bady angel for 60 sec
@@ -76,9 +106,14 @@ if __name__ == '__main__':
             segment_time = timer
             x=x+1
 
-   
+        if segment_time!=0 and angel_analsis(angel, angel_avg, platform_angle, Segment_list[x-1].direction):
+            motor.move_platform(motors, 'h', 0, 100)
+            segment_time = 0
+            platform_angle = [0,0]
+
+
         if segment_time!=0 and segment_time + 5 < timer: 
-            motor.move_platform(motors, 'h', 0, 200)
+            motor.move_platform(motors, 'h', 0, 100)
             segment_time = 0
             platform_angle = [0,0]
             

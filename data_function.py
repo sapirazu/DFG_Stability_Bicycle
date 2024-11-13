@@ -90,12 +90,13 @@ def calibrate_body_angle(sheet):
 def create_chart(sheet):
         #create the chart in the excel file time will be the x axis and the angel will be the y axis
     chart = openpyxl.chart.LineChart()
-    chart.style = 13
+    chart.style = 10
     chart.y_axis.title = "Angel"
     chart.x_axis.title = "Time"
     chart.title = "Angel over time"
     data = openpyxl.chart.Reference(sheet, min_col=2, min_row=1, max_row=sheet.max_row, max_col=sheet.max_column)
     chart.add_data(data, titles_from_data=True)
+
     sheet.add_chart(chart, "F1")
 
 
@@ -107,3 +108,54 @@ def create_user_directory(user_name):
     except Exception as e:
         print(f"Failed to create directory '{directory_path}'. Error: {e}")
     return directory_path
+
+def create_plot():
+    # create the plot for the angel
+    import matplotlib.pyplot as plt
+    plt.ion()
+    plt.show()
+    plt.title('Angel over time')
+    plt.xlabel('Time')
+    plt.ylabel('Angel')
+    plt.grid()
+    plt.plot([], [], 'ro', label='shoulder')
+    plt.plot([], [], 'bo', label='torso_RL')
+    plt.plot([], [], 'go', label='torso_BF')
+    plt.ylim(-20, 20)
+
+    plt.legend()
+
+    return plt
+
+def save_plot(plt, shoulder, torso_RL, torso_BF):
+    # save the plot to the directory
+    plt.plot(shoulder, label='shoulder')
+    plt.plot(torso_RL, label='torso_RL')
+    plt.plot(torso_BF, label='torso_BF')
+    plt.xlabel('Time')
+    plt.ylabel('Angel')
+    plt.legend()
+    plt.savefig('plot.png')
+    plt.pause(0.05)
+    plt.clf()
+
+def update_plot(plt, timer, shoulder, torso_RL, torso_BF, platform_angle_BF, platform_angle_RL, shoulder_avg, torso_RL_avg, torso_BF_avg):
+    # update the plot with the new data
+    plt.plot(timer, shoulder, 'ro')
+    plt.plot(timer, torso_RL, 'bo')
+    plt.plot(timer, torso_BF, 'go')
+    plt.pause(0.0000005)
+
+    # save only the last 100 points
+    if timer > 3:
+        plt.xlim(timer - 3, timer)
+        # delete the first point
+        plt.gca().lines[0].remove()
+        plt.gca().lines[1].remove()
+        plt.gca().lines[2].remove()
+
+
+    else:
+        plt.xlim(0, 3)
+
+    
