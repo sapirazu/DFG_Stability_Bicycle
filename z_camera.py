@@ -117,7 +117,7 @@ def camera_work(zed, camera_data):
         image_left_ocv = camera_data.image.get_data()
         
         cv_viewer.render_2D(image_left_ocv,camera_data.image_scale, camera_data.bodies.body_list, True, sl.BODY_FORMAT.BODY_34)
-        image_left_ocv = cv2.resize(image_left_ocv, (0,0),fx=0.5,fy=0.5 )                        
+        # image_left_ocv = cv2.resize(image_left_ocv, (0,0),fx=1,fy=1)                        
         cv2.imshow("ZED | 2D View", image_left_ocv)
          
         key = cv2.waitKey(key_wait)

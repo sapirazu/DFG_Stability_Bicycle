@@ -48,8 +48,8 @@ def angel_analsis(angel, angel_avg ,platform_angel,direction):
 if __name__ == '__main__':
     
     # connect to camera
-    zed, camera_data=z_camera.stert_camera_recorded()
-    # zed, camera_data=z_camera.stert_camera_live()
+    # zed, camera_data=z_camera.stert_camera_recorded()
+    zed, camera_data=z_camera.stert_camera_live()
    
     # connect to data base
     db, myc=data_function.connect_myc()
