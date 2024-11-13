@@ -48,8 +48,8 @@ def angel_analsis(angel, angel_avg ,platform_angel,direction):
 if __name__ == '__main__':
     
     # connect to camera
-    # zed, camera_data=z_camera.stert_camera_recorded()
-    zed, camera_data=z_camera.stert_camera_live()
+    zed, camera_data=z_camera.stert_camera_recorded()
+    # zed, camera_data=z_camera.stert_camera_live()
    
     # connect to data base
     db, myc=data_function.connect_myc()
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         if segment_time!=0 and (segment_time + 5 < timer or angel_analsis(angel, angel_avg, platform_angle, Segment_list[x-1].direction)):
             motor.move_platform(motors, 'h', 0, 100)
             segment_time = 0
-            data_function.print_plot(plot, sheet)
+            data_function.print_plot(plot, angel, angel_avg, platform_angle, Segment_list[x-1].direction)
             platform_angle = [0,0]
 
         

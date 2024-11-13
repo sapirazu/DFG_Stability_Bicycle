@@ -158,36 +158,36 @@ def update_plot(plt, timer, shoulder, torso_RL, torso_BF, platform_angle_BF, pla
     else:
         plt.xlim(0, 3)
 
-def print_plot(plt, sheet):
+def print_plot(plt, angel, angel_avg, platform_angel, direction):
     # take all the angel of the body from the exel file of the last 60 sec and print the plot
     plt.clf()
+    plt.ylim(-20, 20)
+    plt.grid()
 
-    shoulder = []
-    torso_RL = []
-    torso_BF = []
-    platform_angle_BF = []
-    platform_angle_RL = []
-    shoulder_avg = []
-    torso_RL_avg = []
-    torso_BF_avg = []
+    if direction == 'f' or direction == 'b':
+        # תיצור גרף שמציג את הנקודות ברגע נתון אחד בלי ציר זמן ואז תוסיף את הקווים של הממוצעים
+        plt.plot(angel[2], label='torso_B\F', color='r', marker='o')
+        plt.plot(angel_avg[0], label='torso_B\F_avg', color='b', marker='x')
+        plt.plot(platform_angel[0], label='platform_angle_B\F', color='g', marker='v')
 
-    for row in sheet.iter_rows(min_row=sheet.max_row-120, max_row=sheet.max_row, min_col=2, max_col=10, values_only=True):
-        shoulder.append(row[0])
-        torso_RL.append(row[1])
-        torso_BF.append(row[2])
-        platform_angle_BF.append(row[4])
-        platform_angle_RL.append(row[5])
-        shoulder_avg.append(row[6])
-        torso_RL_avg.append(row[7])
-        torso_BF_avg.append(row[8])
-    
-    plt.plot(shoulder, label='shoulder')
-    plt.plot(torso_RL, label='torso_RL')
-    plt.plot(torso_BF, label='torso_BF')
-    plt.plot(platform_angle_BF, label='platform_angle_BF')
-    plt.plot(platform_angle_RL, label='platform_angle_RL')
-    plt.plot(shoulder_avg, label='shoulder_avg')
-    plt.plot(torso_RL_avg, label='torso_RL_avg')
-    plt.plot(torso_BF_avg, label='torso_BF_avg')
+    if direction == 'r' or direction == 'l':
+        plt.plot(angel[1], label='torso_R\L', color='r', marker='o')
+        plt.plot(angel[0], label='shoulder', color='b', marker='o')
+        plt.plot(angel_avg[0], label='shoulder_avg', color='b', marker='x')
+        plt.plot(angel_avg[1], label='torso_R\L_avg', color='r', marker='x')
+        plt.plot(platform_angel[1], label='platform_angle_R\L', color='g', marker='o')
+
+    plt.xlabel('Time')
+    plt.ylabel('Angel')
+
     plt.legend()
-    
+    # plt.pause(10)
+
+
+
+if __name__ == "__main__":
+    plt = create_plot()
+    angel = [1, 2, -1]
+    angel_avg = [1.5, 1.7, -0.5]
+    platform_angle = [5, 0]
+    print_plot(plt, angel, angel_avg, platform_angle, 'f')
