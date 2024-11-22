@@ -247,13 +247,6 @@ class Ui_MainWindow(object):
         self.lineEdit_age.setGeometry(QRect(10, 450, 131, 31))
         self.lineEdit_age.setFont(font)
 
-        self.MainDiagnosis_label_tab3 = QLabel(self.Add_new_participant)
-        self.MainDiagnosis_label_tab3.setObjectName(u"MainDiagnosis_label_tab3")
-        self.MainDiagnosis_label_tab3.setGeometry(QRect(370, 20, 251, 41))
-        self.MainDiagnosis_line_tab3 = QLineEdit(self.Add_new_participant)
-        self.MainDiagnosis_line_tab3.setObjectName(u"MainDiagnosis_line_tab3")
-        
-        self.MainDiagnosis_line_tab3.setGeometry(QRect(360, 60, 301, 171))
         self.AddParticipant_button_tab3 = QPushButton(self.Add_new_participant)
         self.AddParticipant_button_tab3.setObjectName(u"AddParticipant_button_tab3")
         self.AddParticipant_button_tab3.setGeometry(QRect(250, 420, 181, 41))
@@ -326,7 +319,6 @@ class Ui_MainWindow(object):
         self.Height_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Height [cm]: ", None))
         self.Weight_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Weight [Kg]: ", None))
         self.Age_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Age: ", None))
-        self.MainDiagnosis_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Participant main diagnosis:", None))
         self.AddParticipant_button_tab3.setText(QCoreApplication.translate("MainWindow", u"Add participant", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Add_new_participant), QCoreApplication.translate("MainWindow", u"Add new participant ", None))
     # retranslateUi 
