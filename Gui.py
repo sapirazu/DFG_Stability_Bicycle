@@ -11,10 +11,10 @@ from PyQt5.QtCore import QSize, QRect
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtCore import QMetaObject
 
-
-
+# GUI class
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
         if MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(830, 642)
@@ -28,6 +28,9 @@ class Ui_MainWindow(object):
         font = QFont()
         font.setPointSize(9)
         self.tabWidget.setFont(font)
+
+
+#Tab 1: START EXERCISE 
         self.Start_exercise = QWidget()
         self.Start_exercise.setObjectName(u"Start_exercise")
         self.Delete_participant = QPushButton(self.Start_exercise)
@@ -94,6 +97,8 @@ class Ui_MainWindow(object):
         self.Exercise_type_label.setGeometry(QRect(10, 410, 231, 31))
         self.Exercise_type_label.setFont(font)
         self.tabWidget.addTab(self.Start_exercise, "")
+
+#Tab 2: CREATE EXERCISE 
         self.Creat_exercise = QWidget()
         self.Creat_exercise.setObjectName(u"Creat_exercise")
         self.Exercise_name = QLabel(self.Creat_exercise)
@@ -112,114 +117,156 @@ class Ui_MainWindow(object):
         self.SetTotalExeDuration.setObjectName(u"SetTotalExeDuration")
         self.SetTotalExeDuration.setGeometry(QRect(10, 130, 231, 31))
         self.SetTotalExeDuration.setFont(font)
+
+        #checkBox to calculate the total duration of the exercise in order to set the amount of perturbation
         self.SaveExercise_checkBox = QCheckBox(self.Creat_exercise)
         self.SaveExercise_checkBox.setObjectName(u"SaveExercise_checkBox")
         self.SaveExercise_checkBox.setGeometry(QRect(270, 140, 81, 20))
         self.SaveExercise_checkBox.setFont(font)
+
+        #create perturbation table
         self.SetDesiredPertub_label_tab2 = QLabel(self.Creat_exercise)
         self.SetDesiredPertub_label_tab2.setObjectName(u"SetDesiredPertub_label_tab2")
         self.SetDesiredPertub_label_tab2.setGeometry(QRect(0, 200, 211, 31))
         self.SetDesiredPertub_label_tab2.setFont(font)
+        
         self.Perturbation_time = QLabel(self.Creat_exercise)
         self.Perturbation_time.setObjectName(u"Perturbation_time")
         self.Perturbation_time.setGeometry(QRect(0, 250, 131, 24))
         self.Perturbation_time.setFont(font)
+        
         self.PertubationType_label_tab2 = QLabel(self.Creat_exercise)
         self.PertubationType_label_tab2.setObjectName(u"PertubationType_label_tab2")
         self.PertubationType_label_tab2.setGeometry(QRect(0, 290, 141, 24))
         self.PertubationType_label_tab2.setFont(font)
+        
         self.PertubationDegrees_label_tab2 = QLabel(self.Creat_exercise)
         self.PertubationDegrees_label_tab2.setObjectName(u"PertubationDegrees_label_tab2")
         self.PertubationDegrees_label_tab2.setGeometry(QRect(0, 330, 151, 24))
         self.PertubationDegrees_label_tab2.setFont(font)
+        
         self.Speed_label_tab2 = QLabel(self.Creat_exercise)
         self.Speed_label_tab2.setObjectName(u"Speed_label_tab2")
         self.Speed_label_tab2.setGeometry(QRect(0, 370, 81, 24))
         self.Speed_label_tab2.setFont(font)
+        
         self.Perturbation_type = QComboBox(self.Creat_exercise)
+        Perturbation_list = ['-','Left', 'Right', 'Forward','Backward','No perturbations']
+        self.Perturbation_type.addItems(Perturbation_list)
         self.Perturbation_type.setObjectName(u"Perturbation_type")
         self.Perturbation_type.setGeometry(QRect(180, 290, 141, 31))
         self.Perturbation_type.setFont(font)
+        
         self.Speed = QComboBox(self.Creat_exercise)
         self.Speed.setObjectName(u"Speed")
         self.Speed.setGeometry(QRect(180, 370, 141, 31))
         self.Speed.setFont(font)
+        
         self.SetPertubTime = QSpinBox(self.Creat_exercise)
         self.SetPertubTime.setObjectName(u"SetPertubTime")
         self.SetPertubTime.setGeometry(QRect(180, 250, 141, 31))
         self.SetPertubTime.setFont(font)
+        
         self.Addpertub_button_tab2 = QPushButton(self.Creat_exercise)
         self.Addpertub_button_tab2.setObjectName(u"Addpertub_button_tab2")
         self.Addpertub_button_tab2.setGeometry(QRect(20, 420, 121, 41))
         self.Addpertub_button_tab2.setFont(font)
+        
         self.AddExercise_button_tab2 = QPushButton(self.Creat_exercise)
         self.AddExercise_button_tab2.setObjectName(u"AddExercise_button_tab2")
         self.AddExercise_button_tab2.setGeometry(QRect(310, 510, 131, 41))
         self.AddExercise_button_tab2.setFont(font)
+        
         self.DeleteExercise_button_tab2 = QPushButton(self.Creat_exercise)
         self.DeleteExercise_button_tab2.setObjectName(u"DeleteExercise_button_tab2")
         self.DeleteExercise_button_tab2.setGeometry(QRect(270, 50, 121, 31))
         self.DeleteExercise_button_tab2.setFont(font)
+        
         self.PertubationtableWidget = QTableWidget(self.Creat_exercise)
         self.PertubationtableWidget.setObjectName(u"PertubationtableWidget")
         self.PertubationtableWidget.setGeometry(QRect(490, 200, 256, 192))
+        
         self.ClearTable_button_tab2 = QPushButton(self.Creat_exercise)
         self.ClearTable_button_tab2.setObjectName(u"ClearTable_button_tab2")
         self.ClearTable_button_tab2.setGeometry(QRect(530, 410, 171, 41))
         self.ClearTable_button_tab2.setFont(font)
+        
         self.SaveEditTable_checkBox = QCheckBox(self.Creat_exercise)
         self.SaveEditTable_checkBox.setObjectName(u"SaveEditTable_checkBox")
         self.SaveEditTable_checkBox.setGeometry(QRect(170, 430, 211, 21))
         self.SaveEditTable_checkBox.setFont(font)
+        
         self.Perturbation_degrees = QDoubleSpinBox(self.Creat_exercise)
         self.Perturbation_degrees.setObjectName(u"Perturbation_degrees")
         self.Perturbation_degrees.setGeometry(QRect(180, 330, 141, 31))
+        
         self.tabWidget.addTab(self.Creat_exercise, "")
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.FullName_label_tab2 = QLabel(self.tab)
-        self.FullName_label_tab2.setObjectName(u"FullName_label_tab2")
-        self.FullName_label_tab2.setGeometry(QRect(0, 10, 161, 41))
-        self.FullName_label_tab3 = QLineEdit(self.tab)
+
+#Tab 3: Add new participant
+        self.Add_new_participant = QWidget()
+        self.Add_new_participant.setObjectName(u"Add_new_participant")
+        
+        self.FullName_label_tab3 = QLabel(self.Add_new_participant)
         self.FullName_label_tab3.setObjectName(u"FullName_label_tab3")
-        self.FullName_label_tab3.setGeometry(QRect(10, 50, 261, 31))
-        self.ParticipantID_label_tab3 = QLabel(self.tab)
+        self.FullName_label_tab3.setGeometry(QRect(0, 10, 161, 41))
+        self.FullName_line_tab3 = QLineEdit(self.Add_new_participant)
+        self.FullName_line_tab3.setObjectName(u"FullName_line_tab3")
+        self.FullName_line_tab3.setGeometry(QRect(10, 50, 261, 31))
+        
+        self.ParticipantID_label_tab3 = QLabel(self.Add_new_participant)
         self.ParticipantID_label_tab3.setObjectName(u"ParticipantID_label_tab3")
         self.ParticipantID_label_tab3.setGeometry(QRect(0, 90, 161, 41))
-        self.ParticipantID_label_tab3_2 = QLineEdit(self.tab)
-        self.ParticipantID_label_tab3_2.setObjectName(u"ParticipantID_label_tab3_2")
-        self.ParticipantID_label_tab3_2.setGeometry(QRect(10, 130, 261, 31))
-        self.Gender_label_tab3 = QLabel(self.tab)
+        self.ParticipantID_line_tab3 = QLineEdit(self.Add_new_participant)
+        self.ParticipantID_line_tab3.setObjectName(u"ParticipantID_line_tab3")
+        self.ParticipantID_line_tab3.setGeometry(QRect(10, 130, 261, 31))
+
+        self.Gender_label_tab3 = QLabel(self.Add_new_participant)
         self.Gender_label_tab3.setObjectName(u"Gender_label_tab3")
         self.Gender_label_tab3.setGeometry(QRect(0, 170, 161, 41))
-        self.Gender = QComboBox(self.tab)
-        self.Gender.addItem("")
-        self.Gender.addItem("")
-        self.Gender.addItem("")
+        self.Gender = QComboBox(self.Add_new_participant)
+        Gender_list = ['-','male','female']
+        self.Gender.addItems(Gender_list)
         self.Gender.setObjectName(u"Gender")
         self.Gender.setGeometry(QRect(10, 210, 131, 31))
-        self.Height_label_tab3 = QLabel(self.tab)
+        
+        self.Height_label_tab3 = QLabel(self.Add_new_participant)
         self.Height_label_tab3.setObjectName(u"Height_label_tab3")
         self.Height_label_tab3.setGeometry(QRect(0, 250, 161, 41))
-        self.Weight_label_tab3 = QLabel(self.tab)
+        
+        self.Weight_label_tab3 = QLabel(self.Add_new_participant)
         self.Weight_label_tab3.setObjectName(u"Weight_label_tab3")
         self.Weight_label_tab3.setGeometry(QRect(0, 330, 161, 41))
-        self.MainDiagnosis_label_tab3 = QLabel(self.tab)
+        
+        self.Age_label_tab3 = QLabel(self.Add_new_participant)
+        self.Age_label_tab3.setObjectName(u"Age_label_tab3")
+        self.Age_label_tab3.setGeometry(QRect(0, 410, 161, 41))
+        self.Age_label_tab3.setFont(font)
+
+        self.lineEdit_age = QLineEdit(self.Add_new_participant)
+        self.lineEdit_age.setObjectName(u"lineEdit_age")
+        self.lineEdit_age.setGeometry(QRect(10, 450, 131, 31))
+        self.lineEdit_age.setFont(font)
+
+        self.MainDiagnosis_label_tab3 = QLabel(self.Add_new_participant)
         self.MainDiagnosis_label_tab3.setObjectName(u"MainDiagnosis_label_tab3")
         self.MainDiagnosis_label_tab3.setGeometry(QRect(370, 20, 251, 41))
-        self.MainDiagnosis_label_tab3_2 = QLineEdit(self.tab)
-        self.MainDiagnosis_label_tab3_2.setObjectName(u"MainDiagnosis_label_tab3_2")
-        self.MainDiagnosis_label_tab3_2.setGeometry(QRect(360, 60, 301, 171))
-        self.AddParticipant_button_tab3 = QPushButton(self.tab)
+        self.MainDiagnosis_line_tab3 = QLineEdit(self.Add_new_participant)
+        self.MainDiagnosis_line_tab3.setObjectName(u"MainDiagnosis_line_tab3")
+        
+        self.MainDiagnosis_line_tab3.setGeometry(QRect(360, 60, 301, 171))
+        self.AddParticipant_button_tab3 = QPushButton(self.Add_new_participant)
         self.AddParticipant_button_tab3.setObjectName(u"AddParticipant_button_tab3")
         self.AddParticipant_button_tab3.setGeometry(QRect(250, 420, 181, 41))
-        self.SetHeight = QDoubleSpinBox(self.tab)
+        
+        self.SetHeight = QDoubleSpinBox(self.Add_new_participant)
         self.SetHeight.setObjectName(u"SetHeight")
         self.SetHeight.setGeometry(QRect(10, 290, 131, 31))
-        self.SetWeight = QDoubleSpinBox(self.tab)
+        
+        self.SetWeight = QDoubleSpinBox(self.Add_new_participant)
         self.SetWeight.setObjectName(u"SetWeight")
         self.SetWeight.setGeometry(QRect(10, 370, 131, 31))
-        self.tabWidget.addTab(self.tab, "")
+        
+        self.tabWidget.addTab(self.Add_new_participant, "")
 
         self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 1)
 
@@ -230,12 +277,12 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
+    
     # setupUi
-
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.Delete_participant.setText(QCoreApplication.translate("MainWindow", u"Delete Participant", None))
@@ -273,19 +320,17 @@ class Ui_MainWindow(object):
         self.ClearTable_button_tab2.setText(QCoreApplication.translate("MainWindow", u"Clear perturbation table", None))
         self.SaveEditTable_checkBox.setText(QCoreApplication.translate("MainWindow", u"Save and edit table", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Creat_exercise), QCoreApplication.translate("MainWindow", u"Create training ", None))
-        self.FullName_label_tab2.setText(QCoreApplication.translate("MainWindow", u"Participant full name: ", None))
+        self.FullName_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Participant full name: ", None))
         self.ParticipantID_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Participant ID: ", None))
         self.Gender_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Gender:", None))
-        self.Gender.setItemText(0, QCoreApplication.translate("MainWindow", u"", None))
-        self.Gender.setItemText(1, QCoreApplication.translate("MainWindow", u"male", None))
-        self.Gender.setItemText(2, QCoreApplication.translate("MainWindow", u"female", None))
-
         self.Height_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Height [cm]: ", None))
         self.Weight_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Weight [Kg]: ", None))
+        self.Age_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Age: ", None))
         self.MainDiagnosis_label_tab3.setText(QCoreApplication.translate("MainWindow", u"Participant main diagnosis:", None))
         self.AddParticipant_button_tab3.setText(QCoreApplication.translate("MainWindow", u"Add participant", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Add new participant ", None))
-    # retranslateUi
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Add_new_participant), QCoreApplication.translate("MainWindow", u"Add new participant ", None))
+    # retranslateUi 
+
 
 if __name__ == "__main__":
     import sys
