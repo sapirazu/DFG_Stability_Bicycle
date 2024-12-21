@@ -14,7 +14,6 @@ from PyQt5.QtCore import QMetaObject
 from PyQt5.QtCore import QTimer
 import sys
 
-# GUI class
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         self._main_window = MainWindow
@@ -27,7 +26,11 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setMinimumSize(QSize(755, 578))
+        self.tabWidget.setGeometry(QRect(0, 0, 800, 600))
+        
+        # Ensure the QTabWidget does not have fixed size constraints
+        self.tabWidget.setMinimumSize(QSize(0, 0))
+        self.tabWidget.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
         font.setPointSize(9)
         self.tabWidget.setFont(font)
@@ -81,7 +84,7 @@ class Ui_MainWindow(object):
         __qtablewidgetitem4.setFont(font);
         self.table_exercise_history_Widget.setHorizontalHeaderItem(4, __qtablewidgetitem4)
         self.table_exercise_history_Widget.setObjectName(u"table_exercise_history_Widget")
-        self.table_exercise_history_Widget.setGeometry(QRect(10, 140, 650, 150))
+        self.table_exercise_history_Widget.setGeometry(QRect(10, 140, 650, 160))
         self.table_exercise_history_Widget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.table_exercise_history_Widget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)     # Enable vertical scrolling
         self.table_exercise_history_Widget.verticalHeader().setVisible(False)                   # Hide row numbers
@@ -96,13 +99,13 @@ class Ui_MainWindow(object):
                 for col, value in enumerate(sample):
                         self.table_exercise_history_Widget.setItem(row, col, QTableWidgetItem(value))
         
-        #checkBox to show the exercise history
+        # CheckBox to show the exercise history
         self.show_exercise_history = QCheckBox(self.Start_exercise)
         self.show_exercise_history.setObjectName(u"show_exercise_history")
         self.show_exercise_history.setGeometry(QRect(0, 310, 311, 61))
         self.show_exercise_history.setFont(font)
         
-        #choose the exercise type from the comboBox
+        # Choose the exercise type from the comboBox
         self.exercise_type = QLabel(self.Start_exercise)
         self.exercise_type.setObjectName(u"exercise_type")
         self.exercise_type.setGeometry(QRect(0, 390, 251, 16))
@@ -118,21 +121,21 @@ class Ui_MainWindow(object):
         self.Start_button_tab1.setGeometry(QRect(320, 510, 121, 41))
         self.Start_button_tab1.setFont(font)
 
-        #label to show the total duration of the exercise
-        self.Total_duration = QLabel(self.Start_exercise)
-        self.Total_duration.setObjectName(u"Total_duration")
-        self.Total_duration.setGeometry(QRect(270, 460, 121, 31))
-        font1 = QFont()
-        font1.setPointSize(10)
-        font1.setBold(True)
-        font1.setWeight(75)
-        self.Total_duration.setFont(font1)
+        # #label to show the total duration of the exercise
+        # self.Total_duration = QLabel(self.Start_exercise)
+        # self.Total_duration.setObjectName(u"Total_duration")
+        # self.Total_duration.setGeometry(QRect(270, 460, 121, 31))
+        # font1 = QFont()
+        # font1.setPointSize(10)
+        # font1.setBold(True)
+        # font1.setWeight(75)
+        # self.Total_duration.setFont(font1)
         
-        #label to show the running time
-        self.running_time = QLabel(self.Start_exercise)
-        self.running_time.setObjectName(u"running_time")
-        self.running_time.setGeometry(QRect(410, 460, 181, 31))
-        self.running_time.setFont(font1)
+        # #label to show the running time
+        # self.running_time = QLabel(self.Start_exercise)
+        # self.running_time.setObjectName(u"running_time")
+        # self.running_time.setGeometry(QRect(410, 460, 181, 31))
+        # self.running_time.setFont(font1)
 
 
 
@@ -155,7 +158,7 @@ class Ui_MainWindow(object):
         # Add Total Exercise Duration
         self.TotalExerciseDuration_label_tab2 = QLabel(self.Creat_exercise)
         self.TotalExerciseDuration_label_tab2.setObjectName(u"TotalExerciseDuration_label_tab2")
-        self.TotalExerciseDuration_label_tab2.setGeometry(QRect(0, 90, 161, 41))
+        self.TotalExerciseDuration_label_tab2.setGeometry(QRect(0, 90, 200, 41))
         self.TotalExerciseDuration_label_tab2.setFont(font)
         self.TotalExerciseDuration_label_tab2.setText(u"")
         
@@ -186,10 +189,10 @@ class Ui_MainWindow(object):
         self.SetDesiredPertub_label_tab2.setGeometry(QRect(0, 200, 211, 31))
         self.SetDesiredPertub_label_tab2.setFont(font)
         
-        self.Perturbation_time = QLabel(self.Creat_exercise)
-        self.Perturbation_time.setObjectName(u"Perturbation_time")
-        self.Perturbation_time.setGeometry(QRect(0, 250, 131, 24))
-        self.Perturbation_time.setFont(font)
+        self.perturbation_start_time_label = QLabel(self.Creat_exercise)
+        self.perturbation_start_time_label.setObjectName(u"perturbation_start_time_label")
+        self.perturbation_start_time_label.setGeometry(QRect(0, 250, 200, 24))
+        self.perturbation_start_time_label.setFont(font)
         
         self.PertubationType_label_tab2 = QLabel(self.Creat_exercise)
         self.PertubationType_label_tab2.setObjectName(u"PertubationType_label_tab2")
@@ -207,60 +210,58 @@ class Ui_MainWindow(object):
         self.Speed_label_tab2.setGeometry(QRect(0, 370, 81, 24))
         self.Speed_label_tab2.setFont(font)
         
+        # START OF exercise input fields
+        self.SetPertubStartTime = QSpinBox(self.Creat_exercise)
+        self.SetPertubStartTime.setObjectName(u"SetPertubStartTime")
+        self.SetPertubStartTime.setGeometry(QRect(220, 250, 141, 31))
+        self.SetPertubStartTime.setFont(font)
+        
         self.Perturbation_type = QComboBox(self.Creat_exercise)
         Perturbation_list = ['-','Left', 'Right', 'Forward','Backward','No perturbations']
         self.Perturbation_type.addItems(Perturbation_list)
         self.Perturbation_type.setObjectName(u"Perturbation_type")
-        self.Perturbation_type.setGeometry(QRect(180, 290, 141, 31))
+        self.Perturbation_type.setGeometry(QRect(220, 290, 141, 31))
         self.Perturbation_type.setFont(font)
         
+        self.Perturbation_degrees = QDoubleSpinBox(self.Creat_exercise)
+        self.Perturbation_degrees.setObjectName(u"Perturbation_degrees")
+        self.Perturbation_degrees.setGeometry(QRect(220, 330, 141, 31))
+
         self.Speed = QComboBox(self.Creat_exercise)
         Speed_list = ['-','1','2','3','4','5','6','7','8','9','10']
         self.Speed.addItems(Speed_list)
         self.Speed.setObjectName(u"Speed")
-        self.Speed.setGeometry(QRect(180, 370, 141, 31))
+        self.Speed.setGeometry(QRect(220, 370, 141, 31))
         self.Speed.setFont(font)
         
-        self.SetPertubTime = QSpinBox(self.Creat_exercise)
-        self.SetPertubTime.setObjectName(u"SetPertubTime")
-        self.SetPertubTime.setGeometry(QRect(180, 250, 141, 31))
-        self.SetPertubTime.setFont(font)
-        
+        # END OF exercise input fields
+
         self.Addpertub_button_tab2 = QPushButton(self.Creat_exercise)
         self.Addpertub_button_tab2.setObjectName(u"Addpertub_button_tab2")
-        self.Addpertub_button_tab2.setGeometry(QRect(20, 420, 121, 41))
+        self.Addpertub_button_tab2.setGeometry(QRect(100, 420, 121, 41))
         self.Addpertub_button_tab2.setFont(font)
-        
+
         self.AddExercise_button_tab2 = QPushButton(self.Creat_exercise)
         self.AddExercise_button_tab2.setObjectName(u"AddExercise_button_tab2")
-        self.AddExercise_button_tab2.setGeometry(QRect(310, 510, 131, 41))
+        self.AddExercise_button_tab2.setGeometry(QRect(410, 510, 131, 41))
         self.AddExercise_button_tab2.setFont(font)
-        
-        # self.DeleteExercise_button_tab2 = QPushButton(self.Creat_exercise)
-        # self.DeleteExercise_button_tab2.setObjectName(u"DeleteExercise_button_tab2")
-        # self.DeleteExercise_button_tab2.setGeometry(QRect(270, 50, 121, 31))
-        # self.DeleteExercise_button_tab2.setFont(font)
-        
+
         self.PertubationtableWidget = QTableWidget(self.Creat_exercise)
         self.PertubationtableWidget.setObjectName(u"PertubationtableWidget")
-        self.PertubationtableWidget.setGeometry(QRect(490, 200, 256, 192))
+        self.PertubationtableWidget.setGeometry(QRect(420, 200, 530, 192))
+        self.PertubationtableWidget.setColumnCount(4)
+        self.PertubationtableWidget.setHorizontalHeaderLabels(["Start Time", "Type", "Degrees", "Speed"])
+        self.PertubationtableWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.PertubationtableWidget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.PertubationtableWidget.verticalHeader().setVisible(True)
         
         self.ClearTable_button_tab2 = QPushButton(self.Creat_exercise)
         self.ClearTable_button_tab2.setObjectName(u"ClearTable_button_tab2")
-        self.ClearTable_button_tab2.setGeometry(QRect(530, 410, 171, 41))
+        self.ClearTable_button_tab2.setGeometry(QRect(600, 410, 171, 41))
         self.ClearTable_button_tab2.setFont(font)
         
-        # self.SaveEditTable_checkBox = QCheckBox(self.Creat_exercise)
-        # self.SaveEditTable_checkBox.setObjectName(u"SaveEditTable_checkBox")
-        # self.SaveEditTable_checkBox.setGeometry(QRect(170, 430, 211, 21))
-        # self.SaveEditTable_checkBox.setFont(font)
-        
-        self.Perturbation_degrees = QDoubleSpinBox(self.Creat_exercise)
-        self.Perturbation_degrees.setObjectName(u"Perturbation_degrees")
-        self.Perturbation_degrees.setGeometry(QRect(180, 330, 141, 31))
-        
     
-#Tab 3: Add new participant
+        #Tab 3: Add new participant
         self.Add_new_participant = QWidget()
         self.Add_new_participant.setObjectName(u"Add_new_participant")
         self.tabWidget.addTab(self.Add_new_participant, "")
@@ -319,7 +320,7 @@ class Ui_MainWindow(object):
 
         self.AddParticipant_button_tab3 = QPushButton(self.Add_new_participant)
         self.AddParticipant_button_tab3.setObjectName(u"AddParticipant_button_tab3")
-        self.AddParticipant_button_tab3.setGeometry(QRect(320, 490, 151, 41))
+        self.AddParticipant_button_tab3.setGeometry(QRect(250, 490, 151, 41))
 
         ######### DONE WITH THE TABS #########
 
@@ -346,7 +347,7 @@ class Ui_MainWindow(object):
         self.Participant_ID.setText(_translate("MainWindow", u"Participant ID:", None))
         self.exercise_history.setText(_translate("MainWindow", u"Exercise History:", None))
         self.show_exercise_history.setText(_translate("MainWindow", u"Show exercise history", None))
-        self.Start_button_tab1.setText(_translate("MainWindow", u"START", None))
+        self.Start_button_tab1.setText(_translate("MainWindow", u"BEGIN", None))
         ___qtablewidgetitem = self.table_exercise_history_Widget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(_translate("MainWindow", u"Exercise Number \n"
 "", None));
@@ -363,22 +364,20 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem4.setText(_translate("MainWindow", u"Borg\n"
 "", None));
         self.exercise_type.setText(_translate("MainWindow", u"Exercise name:", None))
-        self.Total_duration.setText(_translate("MainWindow", u"Total duration:", None))
-        self.running_time.setText(_translate("MainWindow", u"00:00:00", None))
+        #self.Total_duration.setText(_translate("MainWindow", u"Total duration:", None))
+        #self.running_time.setText(_translate("MainWindow", u"00:00:00", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Start_exercise), _translate("MainWindow", u"Start training ", None))
         self.Exercise_name.setText(_translate("MainWindow", u"Exercise name:", None))
-        self.TotalExerciseDuration_label_tab2.setText(_translate("MainWindow", u"Total exercise duration: ", None))
+        self.TotalExerciseDuration_label_tab2.setText(_translate("MainWindow", u"Total exercise duration [min]: ", None))
         self.LockTime_checkBox.setText(_translate("MainWindow", u"Lock Time", None))
         self.SetDesiredPertub_label_tab2.setText(_translate("MainWindow", u"Set the desired perturbation:", None))
-        self.Perturbation_time.setText(_translate("MainWindow", u"Start Perturbation at (Seconds): ", None))
+        self.perturbation_start_time_label.setText(_translate("MainWindow", u"Start Perturbation at [sec]: ", None))
         self.PertubationType_label_tab2.setText(_translate("MainWindow", u"Perturbation type:", None))
         self.PertubationDegrees_label_tab2.setText(_translate("MainWindow", u"Perturbation degrees:", None))
         self.Speed_label_tab2.setText(_translate("MainWindow", u"Speed: ", None))
         self.Addpertub_button_tab2.setText(_translate("MainWindow", u"Add perturbation", None))
         self.AddExercise_button_tab2.setText(_translate("MainWindow", u"Add exercise", None))
-        #self.DeleteExercise_button_tab2.setText(_translate("MainWindow", u"Delete exercise", None))
         self.ClearTable_button_tab2.setText(_translate("MainWindow", u"Clear perturbation table", None))
-        #self.SaveEditTable_checkBox.setText(_translate("MainWindow", u"Save and edit table", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Creat_exercise), _translate("MainWindow", u"Create training ", None))
         self.FullName_label_tab3.setText(_translate("MainWindow", u"Participant full name: ", None))
         self.ParticipantID_label_tab3.setText(_translate("MainWindow", u"Participant ID: ", None))
@@ -397,7 +396,8 @@ class MainWindow(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_timer)
         self.time_elapsed = 0
-        
+        self.ui.tabWidget.currentChanged.connect(self.adjust_tab_size)
+       
         #### Connect the buttons to the action - Tab 1 ####
         self.ui.Delete_participant.clicked.connect(self.delete_participant)
         self.ui.Start_button_tab1.clicked.connect(self.start_exercise)
@@ -405,21 +405,40 @@ class MainWindow(QMainWindow):
         
         #### Connect the buttons to the action - Tab 2 ####
         self.ui.LockTime_checkBox.stateChanged.connect(self.update_total_duration_label)
+        self.ui.Addpertub_button_tab2.clicked.connect(self.add_perturbation)
+        self.ui.ClearTable_button_tab2.clicked.connect(self.clear_perturbation_table)
+        self.ui.AddExercise_button_tab2.clicked.connect(self.Add_Exercise)
 
         #### Connect the buttons to the action - Tab 3 ####
         self.ui.AddParticipant_button_tab3.clicked.connect(self.add_participant)
 
+    def adjust_tab_size(self, index):
+        if index == 0:  # Start_exercise tab
+            self.setMinimumSize(QSize(800, 650))
+            self.setMaximumSize(QSize(800, 650))
+            self.resize(800, 650)
+        elif index == 1:  # Creat_exercise tab
+            self.setMinimumSize(QSize(1000, 650))
+            self.setMaximumSize(QSize(1000, 650))
+            self.resize(1000, 650)
+        elif index == 2:  # Add_new_participant tab
+            self.setMinimumSize(QSize(700, 650))
+            self.setMaximumSize(QSize(700, 650))
+            self.resize(700, 650)
+        self.adjustSize()  # Adjust the size of the window to fit the contents
 
 
-
-    #### Functions - Tab 1 ####
+        #### Functions - Tab 1 ####
     def delete_participant(self):
         print("Delete Participant button clicked")
 
     def start_exercise(self):
         print("Start Exercise button clicked")
-        self.time_elapsed = 0
-        self.timer.start(1000)  # Update every second
+        initial_dialog = InitialConfirmationDialog(self)
+        if initial_dialog.exec_() == QDialog.Accepted:
+            trainee_id = "12345"  # Replace with actual trainee ID
+            control_dialog = ExerciseControlDialog(self, trainee_id)
+            control_dialog.exec_()
         
     def update_timer(self):
         self.time_elapsed += 1
@@ -452,7 +471,7 @@ class MainWindow(QMainWindow):
                 new_row_count = current_row_count - len(mock_data)
                 self.ui.table_exercise_history_Widget.setRowCount(new_row_count)
 
-       #### Functions - Tab 2 #### 
+    #### Functions - Tab 2 #### 
     def update_total_duration_label(self):
         if self.ui.LockTime_checkBox.isChecked():
             total_duration_text = self.ui.SetTotalExeDuration.text()
@@ -464,9 +483,95 @@ class MainWindow(QMainWindow):
         else:
             self.ui.total_duration_seconds_label.setText("")
     
-    #### Functions - Tab 3 ####
+    def add_perturbation(self):
+        start_time = self.ui.SetPertubStartTime.text()
+        perturbation_type = self.ui.Perturbation_type.currentText()
+        perturbation_degrees = self.ui.Perturbation_degrees.text()
+        speed = self.ui.Speed.currentText()
+        
+        row_position = self.ui.PertubationtableWidget.rowCount()
+        self.ui.PertubationtableWidget.insertRow(row_position)
+        
+        self.ui.PertubationtableWidget.setItem(row_position, 0, QTableWidgetItem(start_time))
+        self.ui.PertubationtableWidget.setItem(row_position, 1, QTableWidgetItem(perturbation_type))
+        self.ui.PertubationtableWidget.setItem(row_position, 2, QTableWidgetItem(perturbation_degrees))
+        self.ui.PertubationtableWidget.setItem(row_position, 3, QTableWidgetItem(speed))
+    
+    def clear_perturbation_table(self):
+        self.ui.PertubationtableWidget.clearContents()
+        self.ui.PertubationtableWidget.setRowCount(0)
+
+    def Add_Exercise(self):
+            print("Add Exercise button clicked")
+
+        #### Functions - Tab 3 ####
     def add_participant(self):
         print("Add Participant button clicked")
+
+class InitialConfirmationDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Safety check")
+        self.setGeometry(750, 500, 450, 200)
+
+        font = QFont()
+        font.setPointSize(10)  # Set the font size
+        font.setBold(True)     # Set the font to bold
+
+        self.label = QLabel("Please make sure that the trainee is securely \nconnected to the harness!", self)
+        self.label.setGeometry(30, 30, 440, 60)
+        self.label.setFont(font)  # Apply the font to the label
+        self.continue_button = QPushButton("Continue", self)
+        self.continue_button.setGeometry(40, 130, 160, 40)
+        self.continue_button.clicked.connect(self.accept)
+
+        self.return_button = QPushButton("Return", self)
+        self.return_button.setGeometry(240, 130, 160, 40)
+        self.return_button.clicked.connect(self.reject)
+
+class ExerciseControlDialog(QDialog):
+    def __init__(self, parent=None, trainee_id=""):
+        super().__init__(parent)
+        self.setWindowTitle("Exercise Control")
+        self.setGeometry(750, 550, 400, 300)
+
+        self.time_label = QLabel("Time elapsed: 0 seconds", self)
+        self.time_label.setGeometry(10, 10, 380, 30)
+
+        self.trainee_id_label = QLabel(f"Trainee ID: {trainee_id}", self)
+        self.trainee_id_label.setGeometry(10, 50, 380, 30)
+
+        self.pause_button = QPushButton("Pause", self)
+        self.pause_button.setGeometry(10, 90, 180, 40)
+        self.pause_button.setStyleSheet("background-color: orange")
+        self.pause_button.clicked.connect(self.pause_timer)
+
+        self.stop_button = QPushButton("Stop", self)
+        self.stop_button.setGeometry(200, 90, 180, 40)
+        self.stop_button.setStyleSheet("background-color: red")
+        self.stop_button.clicked.connect(self.stop_timer)
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_time)
+        self.time_elapsed = 0
+        self.timer.start(1000)  # Update every second
+
+    def update_time(self):
+        self.time_elapsed += 1
+        self.time_label.setText(f"Time elapsed: {self.time_elapsed} seconds")
+
+    def pause_timer(self):
+        if self.timer.isActive():
+            self.timer.stop()
+            self.pause_button.setText("Resume")
+        else:
+            self.timer.start(1000)
+            self.pause_button.setText("Pause")
+
+    def stop_timer(self):
+        self.timer.stop()
+        self.accept()  # Close the dialog
+
 
 
 if __name__ == "__main__":
